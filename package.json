@@ -1,0 +1,146 @@
+{
+  "name": "wonda-shop-backend-core",
+  "version": "0.0.1",
+  "description": "Core backend application for Wonda Shop",
+  "main": "./src/lib/app.js",
+  "config": {
+    "ip": "0.0.0.0",
+    "port": 8087,
+    "databases": {
+      "mongo-store": {
+        "host": "127.0.0.1",
+        "port": 27017,
+        "dbName": "WondaShop",
+        "options": {
+          "autoReconnect": true,
+          "poolSize": 10,
+          "connectTimeoutMS": 10000,
+          "socketTimeoutMS": 10000
+        }
+      },
+      "postgres-store": {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "dbName": "WondaShop",
+        "options": {
+          "pool": {
+            "maxConnections": 10,
+            "maxIdleTime": 240,
+            "logging": true
+          }
+        }
+      }
+    }
+  },
+  "nyc": {
+    "statements": 0,
+    "branches": 0,
+    "functions": 0,
+    "lines": 0,
+    "excludes": [
+      "**/*.spec.js"
+    ],
+    "include": [
+      "src/lib/**"
+    ],
+    "report-dir": "./spec/coverage"
+  },
+  "scripts": {
+    "------------- EXPOSED -------------": "",
+    "start": "node --stack-size=65500 src/lib/app.js",
+    "lint": "eslint --format 'node_modules/eslint-friendly-formatter' --ext .js src/ examples/ bin/",
+    "unit-test": "cat src/spec/support/run_all_the_tests.txt; npm run mocha-unit-test",
+    "integration-test": "",
+    "_precommit": "npm run lint && npm run coverage:unit-test",
+    "_prepush": "npm run branch-check && npm run lint && npm run coverage:unit-test && npm run coverage:update-thresholds",
+    "version:bump": "npm run version:instruction && ./bin/version-bump.js",
+    "------------- INTERNAL ------------": "",
+    "jasmine-unit-test": "node src/spec/support/jasmine-test-runner.js -- -t unit",
+    "mocha-unit-test": "multi='tap=- xunit=spec/reports/xunit.xml' mocha --compilers js:babel-register --opts mocha.opts --reporter mocha-multi | faucet",
+    "coverage:unit-test": "nyc --check-coverage --all --preload-sources --reporter cobertura --reporter html mocha --compilers js:babel-register --opts mocha.opts",
+    "coverage:integration-test": "",
+    "coverage:update-thresholds": "echo 'disable `coverage:update-thresholds` for now' || ./bin/update-test-coverage.js",
+    "branch-check": "./bin/restrict-branches-to-push.sh",
+    "version:instruction": "echo 'Please specify full version number after `npm run version:bump`.  E.g. $ npm run version:bump 0.0.1'",
+    "------------- LOCAL DEV -----------": "",
+    "local-unit-test": "mocha --compilers js:babel-register --opts mocha.opts --bail",
+    "local-integration-test": "",
+    "coverage:report": "nyc report",
+    "coverage:html-report": "open spec/coverage/index.html",
+    "dev:start": "nodemon --watch src/",
+    "dev:watch": "watch 'npm run lint' src/",
+    "dev:performance": "nodemon --perf_basic_prof --debug --trace_gc",
+    "debug": "node --debug --debug-brk src/lib/app.js"
+  },
+  "engines": {
+    "node": "8.9.4",
+    "npm": ">=5.6.0"
+  },
+  "dependencies": {
+    "bluebird": "3.4.6",
+    "body-parser": "1.15.2",
+    "compression": "1.6.2",
+    "cookie-parser": "1.4.3",
+    "cors": "2.8.1",
+    "coupon-code": "0.4.5",
+    "errorhandler": "1.4.3",
+    "express": "4.14.0",
+    "jade": "1.11.0",
+    "jsonwebtoken": "7.4.3",
+    "method-override": "2.3.6",
+    "mongojs": "2.4.0",
+    "morgan": "1.7.0",
+    "nodemailer": "0.7.1",
+    "nodemailer-smtp-transport": "2.7.2",
+    "pg": "6.1.0",
+    "pgtools": "0.2.2",
+    "sequelize": "3.25.0",
+    "serve-favicon": "2.3.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "8.2.3",
+    "babel-plugin-transform-builtin-extend": "1.1.2",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-es2016": "6.24.1",
+    "babel-preset-es2017": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "babel-register": "6.26.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "chai-shallow-deep-equal": "^1.4.0",
+    "chance": "^1.0.4",
+    "eslint": "4.19.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-config-prettier": "6.0.0",
+    "eslint-friendly-formatter": "4.0.1",
+    "eslint-plugin-chai-expect": "1.1.1",
+    "eslint-plugin-import": "2.11.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-prettier": "3.1.0",
+    "eslint-plugin-react": "7.7.0",
+    "faucet": "0.0.1",
+    "husky": "^0.11.9",
+    "jasmine": "^2.4.1",
+    "jasmine-reporters": "^2.1.1",
+    "mocha": "^3.4.2",
+    "mocha-multi": "^0.9.0",
+    "nodemon": "^1.11.0",
+    "nyc": "^8.3.1",
+    "prettier": "1.18.2",
+    "sinon": "^1.17.4",
+    "sinon-as-promised": "^4.0.0",
+    "sinon-chai": "^2.8.0",
+    "watch": "^0.19.1"
+  },
+  "author": "Marcus Hsu",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:New-Haven-Foods/wonda-shop-backend-core.git"
+  },
+  "private": true
+}

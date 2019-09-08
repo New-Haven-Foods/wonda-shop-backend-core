@@ -1,0 +1,4 @@
+--require src/spec/support/mocha-test-runner.js
+--recursive
+
+src/spec/unit/**/*.spec.js
