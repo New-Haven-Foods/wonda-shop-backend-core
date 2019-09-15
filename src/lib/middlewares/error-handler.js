@@ -1,4 +1,4 @@
-const ValidationError = require('../utils/validationError');
+const ValidationError = require('../utils/validation-error');
 const constants = require('../constants/');
 
 const errorHandler = (err, req, res, next) => {

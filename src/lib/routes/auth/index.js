@@ -1,5 +1,4 @@
 const Controller = require('../../controllers/auth.controller');
-const authCheckMiddleware = require('../../middlewares/auth-check');
 const { Router } = require('express');
 
 const router = Router();
@@ -10,6 +9,7 @@ router.post('/login', Controller.login);
 router.get('/logout', Controller.logout);
 router.post('/forgot-password', Controller.forgotPassword);
 router.get('/token', Controller.getToken);
-router.get('/check', [authCheckMiddleware], Controller.getUserInfo);
+router.get('/user-info', Controller.getUserInfo);
+router.patch('/user-info', Controller.updateUserInfo);
 
 module.exports = exports = router;
